@@ -19,7 +19,7 @@
     </properties>
 
     <description>
-        GWT library for commons-ip-math. It contain the gwt.xml module descriptor while the classes
+        GWT library for commons-ip-math. It contains the gwt.xml module descriptor while the classes
         and the sources are shared from commons-ip-math.
     </description>
 
