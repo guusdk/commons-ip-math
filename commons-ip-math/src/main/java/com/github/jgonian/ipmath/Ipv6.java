@@ -24,6 +24,7 @@
 package com.github.jgonian.ipmath;
 
 import java.math.BigInteger;
+import java.net.Inet6Address;
 import java.util.regex.Pattern;
 
 import static java.math.BigInteger.ONE;
@@ -47,8 +48,10 @@ public final class Ipv6 extends AbstractIp<Ipv6, Ipv6Range> {
     private static final String COLON = ":";
     private static final String ZERO = "0";
     private static final int BITS_PER_PART = 16;
-    private static final int TOTAL_OCTETS = 8;
+    private static final int TOTAL_PARTS = 8;
     private static final int COLON_COUNT_IPV6 = 7;
+    private static final int BITS_PER_OCTET = 8;
+    private static final int TOTAL_OCTETS = 16;
     private static final BigInteger MINUS_ONE = BigInteger.valueOf(-1);
 
     private final BigInteger value;
@@ -69,6 +72,20 @@ public final class Ipv6 extends AbstractIp<Ipv6, Ipv6Range> {
 
     public static Ipv6 of(String value) {
         return parse(value);
+    }
+
+    public static Ipv6 of(byte[] octets) {
+        Validate.isTrue(octets.length == TOTAL_OCTETS, "exactly " + TOTAL_OCTETS + " octets are required");
+        BigInteger result = BigInteger.ZERO;
+        for (int i = 0; i < octets.length; i++) {
+            result = result.shiftLeft(BITS_PER_OCTET).add(BigInteger.valueOf(octets[i]));
+        }
+        return new Ipv6(result);
+    }
+
+    public static Ipv6 of(Inet6Address value) {
+        Validate.notNull(value, "value is required");
+        return of(value.getAddress());
     }
 
     @Override
@@ -174,8 +191,8 @@ public final class Ipv6 extends AbstractIp<Ipv6, Ipv6Range> {
                 ipv6String = expandMissingColons(ipv6String, indexOfDoubleColons);
             }
 
-            final String[] split = ipv6String.split(COLON, TOTAL_OCTETS);
-            Validate.isTrue(split.length == TOTAL_OCTETS);
+            final String[] split = ipv6String.split(COLON, TOTAL_PARTS);
+            Validate.isTrue(split.length == TOTAL_PARTS);
             BigInteger ipv6value = BigInteger.ZERO;
             for (String part : split) {
                 Validate.isTrue(part.length() <= MAX_PART_LENGTH);

@@ -25,6 +25,7 @@ package com.github.jgonian.ipmath;
 
 import static java.math.BigInteger.*;
 import java.math.BigInteger;
+import java.net.Inet6Address;
 
 public final class Ipv6Range extends AbstractIpRange<Ipv6, Ipv6Range> {
 
@@ -49,6 +50,14 @@ public final class Ipv6Range extends AbstractIpRange<Ipv6, Ipv6Range> {
     }
 
     public static Ipv6RangeBuilder from(BigInteger from) {
+        return new Ipv6RangeBuilder(Ipv6.of(from));
+    }
+
+    public static Ipv6RangeBuilder from(byte[] from) {
+        return new Ipv6RangeBuilder(Ipv6.of(from));
+    }
+
+    public static Ipv6RangeBuilder from(Inet6Address from) {
         return new Ipv6RangeBuilder(Ipv6.of(from));
     }
 
@@ -116,6 +125,14 @@ public final class Ipv6Range extends AbstractIpRange<Ipv6, Ipv6Range> {
         }
         
         public Ipv6Range to(BigInteger end) {
+            return to(Ipv6.of(end));
+        }
+
+        public Ipv6Range to(byte[] end) {
+            return to(Ipv6.of(end));
+        }
+
+        public Ipv6Range to(Inet6Address end) {
             return to(Ipv6.of(end));
         }
 

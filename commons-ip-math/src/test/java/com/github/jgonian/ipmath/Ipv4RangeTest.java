@@ -25,6 +25,9 @@ package com.github.jgonian.ipmath;
 
 import org.junit.Test;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -222,6 +225,21 @@ public class Ipv4RangeTest extends AbstractRangeTest<Ipv4, Ipv4Range> {
     @Test
     public void testBuilderWithLongs() {
         Ipv4Range range = Ipv4Range.from(1l).to(3l);
+        assertEquals(ip1, range.start());
+        assertEquals(ip3, range.end());
+    }
+
+    @Test
+    public void testBuilderWithByteArrays() {
+        Ipv4Range range = Ipv4Range.from(new byte[] {0, 0, 0, 1}).to(new byte[] {0, 0, 0, 3});
+        assertEquals(ip1, range.start());
+        assertEquals(ip3, range.end());
+    }
+
+    @Test
+    public void testBuilderWithInetAddresses() throws UnknownHostException
+    {
+        Ipv4Range range = Ipv4Range.from((Inet4Address) InetAddress.getByAddress(new byte[]{0, 0, 0, 1})).to((Inet4Address) InetAddress.getByAddress(new byte[]{0, 0, 0, 3}));
         assertEquals(ip1, range.start());
         assertEquals(ip3, range.end());
     }

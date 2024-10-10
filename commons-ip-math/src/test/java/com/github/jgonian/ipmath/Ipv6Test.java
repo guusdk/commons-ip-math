@@ -28,6 +28,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.net.Inet6Address;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -48,6 +49,11 @@ public class Ipv6Test {
     @Test
     public void testFactoryMethodWithString() {
         assertEquals(new Ipv6(BigInteger.ZERO), Ipv6.of("::"));
+    }
+
+    @Test
+    public void testFactoryMethodWithByteArray() {
+        assertEquals(new Ipv6(BigInteger.ZERO), Ipv6.of(new byte[16])); // Java initializes byte array to all zero.
     }
 
     // Representing IPv6 Addresses
@@ -183,8 +189,23 @@ public class Ipv6Test {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void shouldNotParseNullInetAddress() {
+        Ipv6.of((Inet6Address) null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void shouldFailOnEmptyString() {
         Ipv6.parse("");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testBuilderNotEnoughBytes() {
+        Ipv4.of(new byte[15]);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testBuilderToManyBytes() {
+        Ipv4.of(new byte[17]);
     }
 
     @Test

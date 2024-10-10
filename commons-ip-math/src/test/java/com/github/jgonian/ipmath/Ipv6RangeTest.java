@@ -26,6 +26,9 @@ package com.github.jgonian.ipmath;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import static com.github.jgonian.ipmath.Ipv4.LAST_IPV4_ADDRESS;
@@ -209,6 +212,20 @@ public class Ipv6RangeTest extends AbstractRangeTest<Ipv6, Ipv6Range> {
     @Test
     public void testBuilderWithBigIntegers() {
         Ipv6Range range = Ipv6Range.from(BigInteger.valueOf(1l)).to(BigInteger.valueOf(3l));
+        assertEquals(ip1, range.start());
+        assertEquals(ip3, range.end());
+    }
+
+    @Test
+    public void testBuilderWithByteArrays() {
+        Ipv6Range range = Ipv6Range.from(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}).to(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3});
+        assertEquals(ip1, range.start());
+        assertEquals(ip3, range.end());
+    }
+
+    @Test
+    public void testBuilderWithInetAddresses() throws UnknownHostException {
+        Ipv6Range range = Ipv6Range.from((Inet6Address) InetAddress.getByAddress(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1})).to((Inet6Address) InetAddress.getByAddress(new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3}));
         assertEquals(ip1, range.start());
         assertEquals(ip3, range.end());
     }

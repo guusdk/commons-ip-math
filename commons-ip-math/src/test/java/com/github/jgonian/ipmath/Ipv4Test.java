@@ -27,6 +27,9 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.math.BigInteger;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -45,11 +48,14 @@ public class Ipv4Test {
     }
 
     @Test
-    public void testBuilderMethods() {
+    public void testBuilderMethods() throws UnknownHostException {
         Ipv4 sample = new Ipv4(1l);
         assertEquals(sample, Ipv4.of(BigInteger.ONE));
         assertEquals(sample, Ipv4.of(1l));
         assertEquals(sample, Ipv4.of("0.0.0.1"));
+        assertEquals(sample, Ipv4.of(new byte[] {0, 0, 0, 1}));
+        assertEquals(sample, Ipv4.of((Inet4Address) InetAddress.getByAddress(new byte[] {0, 0, 0, 1})));
+        assertEquals(InetAddress.getByAddress(new byte[] {0, 0, 0, 1}), InetAddress.getByName("0.0.0.1"));
     }
 
     @Test
@@ -57,6 +63,27 @@ public class Ipv4Test {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("from cannot be null");
         Ipv4.of((BigInteger) null);
+    }
+
+    @Test
+    public void testBuilderWithNullInetAddress() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("value is required");
+        Ipv4.of((Inet4Address) null);
+    }
+
+    @Test
+    public void testBuilderNotEnoughBytes() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("exactly 4 octets are required");
+        Ipv4.of(new byte[3]);
+    }
+
+    @Test
+    public void testBuilderToManyBytes() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("exactly 4 octets are required");
+        Ipv4.of(new byte[5]);
     }
 
     @Test

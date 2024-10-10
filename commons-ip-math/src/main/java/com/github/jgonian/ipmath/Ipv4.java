@@ -24,6 +24,7 @@
 package com.github.jgonian.ipmath;
 
 import java.math.BigInteger;
+import java.net.Inet4Address;
 import java.util.regex.Pattern;
 
 public final class Ipv4 extends AbstractIp<Ipv4, Ipv4Range> {
@@ -72,6 +73,20 @@ public final class Ipv4 extends AbstractIp<Ipv4, Ipv4Range> {
 
     public static Ipv4 of(String value) {
         return parse(value);
+    }
+
+    public static Ipv4 of(byte[] octets) {
+        Validate.isTrue(octets.length == TOTAL_OCTETS, "exactly " + TOTAL_OCTETS + " octets are required");
+        long result = 0;
+        for (int i = 0; i < octets.length; i++) {
+            result = addOctet(result, octets[i]);
+        }
+        return new Ipv4(result);
+    }
+
+    public static Ipv4 of(Inet4Address value) {
+        Validate.notNull(value, "value is required");
+        return of(value.getAddress());
     }
 
     public static Ipv4 parse(String ipv4Address) {

@@ -24,6 +24,7 @@
 package com.github.jgonian.ipmath;
 
 import java.math.BigInteger;
+import java.net.Inet4Address;
 
 public final class Ipv4Range extends AbstractIpRange<Ipv4, Ipv4Range> {
 
@@ -52,6 +53,14 @@ public final class Ipv4Range extends AbstractIpRange<Ipv4, Ipv4Range> {
     }
 
     public static Ipv4RangeBuilder from(Long from) {
+        return new Ipv4RangeBuilder(Ipv4.of(from));
+    }
+
+    public static Ipv4RangeBuilder from(byte[] from) {
+        return new Ipv4RangeBuilder(Ipv4.of(from));
+    }
+
+    public static Ipv4RangeBuilder from(Inet4Address from) {
         return new Ipv4RangeBuilder(Ipv4.of(from));
     }
 
@@ -122,6 +131,14 @@ public final class Ipv4Range extends AbstractIpRange<Ipv4, Ipv4Range> {
         }
 
         public Ipv4Range to(Long end) {
+            return to(Ipv4.of(end));
+        }
+
+        public Ipv4Range to(byte[] end) {
+            return to(Ipv4.of(end));
+        }
+
+        public Ipv4Range to(Inet4Address end) {
             return to(Ipv4.of(end));
         }
 
