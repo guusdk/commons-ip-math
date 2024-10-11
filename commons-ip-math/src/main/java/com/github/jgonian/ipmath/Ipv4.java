@@ -79,7 +79,7 @@ public final class Ipv4 extends AbstractIp<Ipv4, Ipv4Range> {
         Validate.isTrue(octets.length == TOTAL_OCTETS, "exactly " + TOTAL_OCTETS + " octets are required");
         long result = 0;
         for (int i = 0; i < octets.length; i++) {
-            result = addOctet(result, octets[i]);
+            result = addOctet(result, Byte.toUnsignedInt(octets[i]));
         }
         return new Ipv4(result);
     }

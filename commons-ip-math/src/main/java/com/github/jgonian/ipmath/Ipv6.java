@@ -78,7 +78,7 @@ public final class Ipv6 extends AbstractIp<Ipv6, Ipv6Range> {
         Validate.isTrue(octets.length == TOTAL_OCTETS, "exactly " + TOTAL_OCTETS + " octets are required");
         BigInteger result = BigInteger.ZERO;
         for (int i = 0; i < octets.length; i++) {
-            result = result.shiftLeft(BITS_PER_OCTET).add(BigInteger.valueOf(octets[i]));
+            result = result.shiftLeft(BITS_PER_OCTET).add(BigInteger.valueOf(Byte.toUnsignedInt(octets[i])));
         }
         return new Ipv6(result);
     }

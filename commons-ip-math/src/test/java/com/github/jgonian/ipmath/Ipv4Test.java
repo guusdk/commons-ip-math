@@ -59,6 +59,13 @@ public class Ipv4Test {
     }
 
     @Test
+    public void testByteArrayBuilder() throws UnknownHostException {
+        Ipv4 sample = new Ipv4(3325256709l);
+        // Explicitly test for cases that involve Java's unsigned byte usage.
+        assertEquals(sample, Ipv4.of(InetAddress.getByName("198.51.100.5").getAddress()));
+    }
+
+    @Test
     public void testBuilderWithNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("from cannot be null");

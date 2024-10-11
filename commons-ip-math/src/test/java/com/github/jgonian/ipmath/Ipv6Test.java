@@ -29,6 +29,8 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -54,6 +56,12 @@ public class Ipv6Test {
     @Test
     public void testFactoryMethodWithByteArray() {
         assertEquals(new Ipv6(BigInteger.ZERO), Ipv6.of(new byte[16])); // Java initializes byte array to all zero.
+    }
+
+    @Test
+    public void testByteArrayBuilder() throws UnknownHostException {
+        // Explicitly test for cases that involve Java's unsigned byte usage.
+        assertEquals(Ipv6.LAST_IPV6_ADDRESS, Ipv6.of(InetAddress.getByName("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff").getAddress()));
     }
 
     // Representing IPv6 Addresses
